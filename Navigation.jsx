@@ -18,6 +18,7 @@ import {
 	ActivityIndicator,
 } from "react-native";
 import { onAuthStateChanged } from "firebase/auth";
+import { doc, onSnapshot } from "firebase/firestore";
 
 //Icons
 import { FontAwesome5, Octicons, Ionicons } from "@expo/vector-icons";
@@ -31,8 +32,10 @@ import Historial from "./screens/Historial";
 import Settings from "./screens/Settings";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
-import { auth } from "./config/firebase";
+import { auth, firestore } from "./config/firebase";
 import { AuthUserContext } from "./utils/LoginContext";
+import Preferencias from "./screens/Preferencias";
+import RegisterName from "./screens/RegisterName";
 
 //Home Stack
 
@@ -231,7 +234,9 @@ function getWidth() {
 const LoginStackNavigator = createNativeStackNavigator();
 const LoginNavStack = () => {
 	return (
-		<LoginStackNavigator.Navigator initialRouteName="Login">
+		<LoginStackNavigator.Navigator
+			initialRouteName="Login
+		">
 			<LoginStackNavigator.Screen
 				name="Login"
 				component={Login}
@@ -242,36 +247,88 @@ const LoginNavStack = () => {
 				component={Register}
 				options={{ headerShown: false }}
 			/>
+			<LoginStackNavigator.Screen
+				name="Preferencias"
+				component={Preferencias}
+				options={{ headerShown: false }}
+			/>
 		</LoginStackNavigator.Navigator>
 	);
 };
 
+const RegisterStackNavigation = createNativeStackNavigator();
+const RegisterNavStack = () => {
+	return (
+		<RegisterStackNavigation.Navigator initialRouteName="RegisterName">
+			<RegisterStackNavigation.Screen
+				name="RegisterName"
+				component={RegisterName}
+				options={{ headerShown: false }}
+			/>
+			<RegisterStackNavigation.Screen
+				name="Preferencias"
+				component={Preferencias}
+				options={{ headerShown: false }}
+			/>
+		</RegisterStackNavigation.Navigator>
+	);
+};
+
 const Navigation = () => {
-	const { user, setUser } = useContext(AuthUserContext);
+	const { user, setUser, userData, setUserData } = useContext(AuthUserContext);
 	const [isLoading, setIsLoading] = useState(true);
 
+	const verifyData = () => {
+		if (userData !== null) {
+			if (user && userData.preferencias.length > 0) {
+				return <MyTabs />;
+			} else if (user) {
+				return <RegisterNavStack />;
+			}
+		} else {
+			return <LoginNavStack />;
+		}
+	};
+
 	useEffect(() => {
+		setIsLoading(true);
 		const unsubscribe = onAuthStateChanged(auth, async (authenticatedUser) => {
 			authenticatedUser ? setUser(authenticatedUser) : setUser(null);
-			setIsLoading(false);
 		});
 		return () => unsubscribe();
 	}, [user]);
 
-	console.log(user);
+	useEffect(() => {
+		if (user != null) {
+			// Get user data
+			const docRef = doc(firestore, "users", user.uid);
+			const unsub = onSnapshot(docRef, (snapShot) => {
+				if (snapShot.exists) {
+					setUserData(snapShot.data());
+					console.log("user data", snapShot.data());
+				} else {
+					setUserData(null);
+					console.log("No existe el usuario");
+				}
+				setIsLoading(false);
+			});
+			return () => {
+				unsub();
+			};
+		} else if (user === null && userData === null) {
+			setIsLoading(false);
+			console.log(isLoading);
+		}
+	}, [user]);
 	if (isLoading) {
 		return (
 			<View style={tw`flex-1 justify-center items-center`}>
-				<ActivityIndicator size="large" color="#0000ff" />
+				<ActivityIndicator size="large" color="#ffaa49" />
 			</View>
 		);
 	}
-
-	return (
-		<NavigationContainer>
-			{user ? <MyTabs /> : <LoginNavStack />}
-		</NavigationContainer>
-	);
+	console.log(isLoading);
+	return <NavigationContainer>{verifyData()}</NavigationContainer>;
 };
 
 export default Navigation;

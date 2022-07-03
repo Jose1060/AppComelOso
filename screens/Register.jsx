@@ -10,7 +10,8 @@ import {
 } from "react-native";
 import tw from "twrnc";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../config/firebase";
+import { auth, firestore } from "../config/firebase";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 const bgImage = require("../assets/bg/register.jpg");
 
@@ -23,7 +24,26 @@ const Register = ({ navigation }) => {
 		if (email !== "" && password !== "" && confirmPassword !== "") {
 			if (password === confirmPassword) {
 				createUserWithEmailAndPassword(auth, email, password)
-					.then(() => console.log("Registro correcto"))
+					.then(async (res) => {
+						await setDoc(doc(firestore, "users", res.user.uid), {
+							email: email,
+							nombre: "",
+							apellido: "",
+							fechaNacimiento: "",
+							genero: "",
+							foto: "",
+							createdAt: serverTimestamp(),
+							active: true,
+							preferencias: [],
+							pasos: 0,
+							puntos: 0,
+							restaurantes_visitados: [],
+							restaurantes_visitados_favoritos: [],
+							numero: "",
+						}).then(() => {
+							navigation.navigate("Preferencias");
+						});
+					})
 					.catch((err) => {
 						Alert.alert("Error", err.message);
 					});

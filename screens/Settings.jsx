@@ -5,6 +5,7 @@ import tw from "twrnc";
 import ExitIcon from "../components/icons/Settings/ExitIcon";
 import { signOut } from "firebase/auth";
 import { auth, database } from "../config/firebase";
+import TagIcon from "../components/icons/Settings/TagIcon";
 
 const Settings = () => {
 	const onSignOut = () => {
@@ -27,14 +28,18 @@ const Settings = () => {
 								}}>
 								<View>
 									<ExitIcon width={110} height={110} color="white" />
-									<Text style={tw`text-xl text-white`}>Cerrar Sesion</Text>
+									<Text style={tw`text-xl text-white text-center`}>
+										Cerrar Sesion
+									</Text>
 								</View>
 							</TouchableOpacity>
 							<TouchableOpacity
 								style={tw`bg-green-400 flex-1 justify-center items-center rounded-xl ml-2`}>
 								<View>
-									<ExitIcon width={110} height={110} color="white" />
-									<Text style={tw`text-xl text-white`}>Settings</Text>
+									<TagIcon width={110} height={110} color="white" />
+									<Text style={tw`text-xl text-white text-center`}>
+										Etiquetas
+									</Text>
 								</View>
 							</TouchableOpacity>
 						</View>

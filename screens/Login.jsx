@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
 	View,
 	Text,
@@ -11,6 +11,7 @@ import {
 import tw from "twrnc";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase";
+import { AuthUserContext } from "../utils/LoginContext";
 
 const bgImage = require("../assets/bg/login.jpg");
 
