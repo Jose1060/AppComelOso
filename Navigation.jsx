@@ -177,11 +177,13 @@ const MyTabs = () => {
 				name="ComelOSOTab"
 				component={ComelOSOStack}
 				options={{
-					tabBarIcon: () => (
-						<TouchableOpacity
-							style={tw`w-16 h-16 bg-red-100/50 rounded-full justify-center items-center mb-10`}>
+					tabBarIcon: ({ color }) => (
+						<View
+							style={tw`w-16 h-16 bg-${
+								color ? `white` : `[${color}]-500`
+							} rounded-full justify-center items-center mb-10`}>
 							<Image source={osoIcono} style={tw`w-12 h-12 `}></Image>
-						</TouchableOpacity>
+						</View>
 					),
 				}}
 			/>
@@ -279,11 +281,13 @@ const Navigation = () => {
 	const [isLoading, setIsLoading] = useState(true);
 
 	const verifyData = () => {
-		if (userData !== null) {
-			if (user && userData.preferencias.length > 0) {
-				return <MyTabs />;
-			} else if (user) {
-				return <RegisterNavStack />;
+		if (user !== null) {
+			if (userData !== null) {
+				if (userData.preferencias.length > 0) {
+					return <MyTabs />;
+				} else {
+					return <RegisterNavStack />;
+				}
 			}
 		} else {
 			return <LoginNavStack />;
@@ -291,35 +295,26 @@ const Navigation = () => {
 	};
 
 	useEffect(() => {
-		setIsLoading(true);
 		const unsubscribe = onAuthStateChanged(auth, async (authenticatedUser) => {
 			authenticatedUser ? setUser(authenticatedUser) : setUser(null);
+			if (authenticatedUser) {
+				setIsLoading(true);
+				const docRef = doc(firestore, "users", authenticatedUser.uid);
+				onSnapshot(docRef, (snapShot) => {
+					if (snapShot.exists) {
+						setUserData(snapShot.data());
+						console.log("user data", snapShot.data());
+					} else {
+						setUserData(null);
+						console.log("No existe el usuario");
+					}
+				});
+			}
+			setIsLoading(false);
 		});
 		return () => unsubscribe();
 	}, [user]);
 
-	useEffect(() => {
-		if (user != null) {
-			// Get user data
-			const docRef = doc(firestore, "users", user.uid);
-			const unsub = onSnapshot(docRef, (snapShot) => {
-				if (snapShot.exists) {
-					setUserData(snapShot.data());
-					console.log("user data", snapShot.data());
-				} else {
-					setUserData(null);
-					console.log("No existe el usuario");
-				}
-				setIsLoading(false);
-			});
-			return () => {
-				unsub();
-			};
-		} else if (user === null && userData === null) {
-			setIsLoading(false);
-			console.log(isLoading);
-		}
-	}, [user]);
 	if (isLoading) {
 		return (
 			<View style={tw`flex-1 justify-center items-center`}>
