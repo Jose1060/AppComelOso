@@ -1,10 +1,4 @@
-import React, {
-	useRef,
-	createContext,
-	useContext,
-	useEffect,
-	useState,
-} from "react";
+import React, { useRef, useContext, useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import tw from "twrnc";
@@ -13,7 +7,6 @@ import {
 	Animated,
 	Dimensions,
 	Image,
-	TouchableOpacity,
 	View,
 	ActivityIndicator,
 } from "react-native";
@@ -36,6 +29,7 @@ import { auth, firestore } from "./config/firebase";
 import { AuthUserContext } from "./utils/LoginContext";
 import Preferencias from "./screens/Preferencias";
 import RegisterName from "./screens/RegisterName";
+import ComelOSOmap from "./screens/ComelOSOmap";
 
 //Home Stack
 
@@ -76,6 +70,12 @@ const ComelOSOStack = () => {
 			<ComelOSOStackNavigator.Screen
 				name="ComelOSO"
 				component={ComelOSO}
+				options={{ headerShown: false }}
+			/>
+
+			<ComelOSOStackNavigator.Screen
+				name="ComelOSOmap"
+				component={ComelOSOmap}
 				options={{ headerShown: false }}
 			/>
 		</ComelOSOStackNavigator.Navigator>
@@ -318,7 +318,7 @@ const Navigation = () => {
 	if (isLoading) {
 		return (
 			<View style={tw`flex-1 justify-center items-center`}>
-				<ActivityIndicator size="large" color="#ffaa49" />
+				<ActivityIndicator size="large" color="#ea4c4c" />
 			</View>
 		);
 	}

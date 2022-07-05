@@ -1,4 +1,11 @@
-import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
+import {
+	View,
+	Text,
+	FlatList,
+	TouchableOpacity,
+	Alert,
+	ScrollView,
+} from "react-native";
 import React, { useContext, useState } from "react";
 import tw from "twrnc";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -113,132 +120,136 @@ const Preferencias = () => {
 
 	return (
 		<SafeAreaView style={tw`bg-orange-100 min-h-full`}>
-			<Text style={tw`text-3xl mt-5 ml-5 font-bold`}>Preferencias</Text>
-			<View style={tw`mt-5 mx-5`}>
-				<Text style={tw`text-lg mb-5`}>
-					Porfavor dejanos saber mas de tus gustos para que podamos ofrecerte la
-					mejor experiencia.
-				</Text>
+			<ScrollView style={tw`h-full`}>
+				<Text style={tw`text-3xl mt-5 ml-5 font-bold`}>Preferencias</Text>
+				<View style={tw`mt-5 mx-5`}>
+					<Text style={tw`text-lg mb-5`}>
+						Porfavor dejanos saber mas de tus gustos para que podamos ofrecerte
+						la mejor experiencia.
+					</Text>
 
-				<View>
-					<Text style={tw`text-lg mb-4 pb-2 border-b-2 text-pink-600`}>
-						¿Que tipo de comida te gusta?
-					</Text>
-					<FlatList
-						style={tw`rounded-3xl`}
-						horizontal={true}
-						data={preferenciasList}
-						keyExtractor={(item) => item.id}
-						showsHorizontalScrollIndicator={false}
-						decelerationRate={0}
-						scrollEventThrottle={16}
-						ItemSeparatorComponent={() => <View style={tw`w-2`} />}
-						renderItem={({ item }) => {
-							return (
-								<TouchableOpacity
-									style={tw`rounded-3xl`}
-									onPress={() => {
-										if (item.presionado === false) {
-											item.presionado = true;
-										} else if (item.presionado === true) {
-											item.presionado = false;
-										}
-										onPrefSelect(item.preferencia);
-										console.log(item.presionado);
-									}}>
-									<Etiqueta
-										{...item}
-										color={item.presionado ? "gray" : item.color}
-									/>
-								</TouchableOpacity>
-							);
-						}}
-					/>
-				</View>
-				<View style={tw`mt-10`}>
-					<Text style={tw`text-lg mb-4 pb-2 border-b-2 text-pink-600`}>
-						¿Como te gusta?
-					</Text>
-					<FlatList
-						style={tw`rounded-3xl `}
-						horizontal={true}
-						data={preferenciasList3}
-						keyExtractor={(item) => item.id}
-						showsHorizontalScrollIndicator={false}
-						decelerationRate={0}
-						scrollEventThrottle={16}
-						ItemSeparatorComponent={() => <View style={tw`w-2`} />}
-						renderItem={({ item }) => {
-							return (
-								<TouchableOpacity
-									onPress={() => {
-										if (item.presionado === false) {
-											item.presionado = true;
-										} else if (item.presionado === true) {
-											item.presionado = false;
-										}
-										onPrefSelect(item.preferencia);
-										console.log(item.presionado);
-									}}>
-									<Etiqueta
-										{...item}
-										color={item.presionado ? "gray" : item.color}
-									/>
-								</TouchableOpacity>
-							);
-						}}
-					/>
-				</View>
-				<View style={tw`mt-10`}>
-					<Text style={tw`text-lg mb-4 pb-2 border-b-2 text-pink-600`}>
-						¿Te gusta la carne o una rica manzana?
-					</Text>
-					<FlatList
-						style={tw`rounded-3xl `}
-						horizontal={true}
-						data={preferenciasList2}
-						keyExtractor={(item) => item.id}
-						showsHorizontalScrollIndicator={false}
-						decelerationRate={0}
-						scrollEventThrottle={16}
-						ItemSeparatorComponent={() => <View style={tw`w-2`} />}
-						renderItem={({ item }) => {
-							return (
-								<TouchableOpacity
-									onPress={() => {
-										if (item.presionado === false) {
-											item.presionado = true;
-										} else if (item.presionado === true) {
-											item.presionado = false;
-										}
-										onPrefSelect(item.preferencia);
-										console.log(item.presionado);
-									}}>
-									<Etiqueta
-										{...item}
-										color={item.presionado ? "gray" : item.color}
-									/>
-								</TouchableOpacity>
-							);
-						}}
-					/>
+					<View>
+						<Text style={tw`text-lg mb-4 pb-2 border-b-2 text-pink-600`}>
+							¿Que tipo de comida te gusta?
+						</Text>
+						<FlatList
+							style={tw`rounded-3xl`}
+							horizontal={true}
+							data={preferenciasList}
+							keyExtractor={(item) => item.id}
+							showsHorizontalScrollIndicator={false}
+							decelerationRate={0}
+							scrollEventThrottle={16}
+							ItemSeparatorComponent={() => <View style={tw`w-2`} />}
+							renderItem={({ item }) => {
+								return (
+									<TouchableOpacity
+										style={tw`rounded-3xl`}
+										onPress={() => {
+											if (item.presionado === false) {
+												item.presionado = true;
+											} else if (item.presionado === true) {
+												item.presionado = false;
+											}
+											onPrefSelect(item.preferencia);
+											console.log(item.presionado);
+										}}>
+										<Etiqueta
+											{...item}
+											color={item.presionado ? "gray" : item.color}
+										/>
+									</TouchableOpacity>
+								);
+							}}
+						/>
+					</View>
+					<View style={tw`mt-10`}>
+						<Text style={tw`text-lg mb-4 pb-2 border-b-2 text-pink-600`}>
+							¿Como te gusta?
+						</Text>
+						<FlatList
+							style={tw`rounded-3xl `}
+							horizontal={true}
+							data={preferenciasList3}
+							keyExtractor={(item) => item.id}
+							showsHorizontalScrollIndicator={false}
+							decelerationRate={0}
+							scrollEventThrottle={16}
+							ItemSeparatorComponent={() => <View style={tw`w-2`} />}
+							renderItem={({ item }) => {
+								return (
+									<TouchableOpacity
+										onPress={() => {
+											if (item.presionado === false) {
+												item.presionado = true;
+											} else if (item.presionado === true) {
+												item.presionado = false;
+											}
+											onPrefSelect(item.preferencia);
+											console.log(item.presionado);
+										}}>
+										<Etiqueta
+											{...item}
+											color={item.presionado ? "gray" : item.color}
+										/>
+									</TouchableOpacity>
+								);
+							}}
+						/>
+					</View>
+					<View style={tw`mt-10`}>
+						<Text style={tw`text-lg mb-4 pb-2 border-b-2 text-pink-600`}>
+							¿Te gusta la carne o una rica manzana?
+						</Text>
+						<FlatList
+							style={tw`rounded-3xl `}
+							horizontal={true}
+							data={preferenciasList2}
+							keyExtractor={(item) => item.id}
+							showsHorizontalScrollIndicator={false}
+							decelerationRate={0}
+							scrollEventThrottle={16}
+							ItemSeparatorComponent={() => <View style={tw`w-2`} />}
+							renderItem={({ item }) => {
+								return (
+									<TouchableOpacity
+										onPress={() => {
+											if (item.presionado === false) {
+												item.presionado = true;
+											} else if (item.presionado === true) {
+												item.presionado = false;
+											}
+											onPrefSelect(item.preferencia);
+											console.log(item.presionado);
+										}}>
+										<Etiqueta
+											{...item}
+											color={item.presionado ? "gray" : item.color}
+										/>
+									</TouchableOpacity>
+								);
+							}}
+						/>
 
-					<TouchableOpacity
-						style={tw`bg-green-500 rounded-3xl px-5 py-2 mt-15`}
-						onPress={async () => {
-							console.log(prefer);
-							if (prefer.length >= 3) {
-								await updateDoc(doc(firestore, "users", user.uid), {
-									preferencias: prefer,
-								});
-							} else {
-								Alert.alert("Por favor seleccione un minimo de 3 preferencias");
-							}
-						}}>
-						<Text style={tw`text-white text-lg`}>Aceptar</Text>
-					</TouchableOpacity>
+						<TouchableOpacity
+							style={tw`bg-green-500 rounded-3xl px-5 py-2 mt-15`}
+							onPress={async () => {
+								console.log(prefer);
+								if (prefer.length >= 3) {
+									await updateDoc(doc(firestore, "users", user.uid), {
+										preferencias: prefer,
+									});
+								} else {
+									Alert.alert(
+										"Por favor seleccione un minimo de 3 preferencias"
+									);
+								}
+							}}>
+							<Text style={tw`text-white text-lg`}>Aceptar</Text>
+						</TouchableOpacity>
+					</View>
 				</View>
-			</View>
+			</ScrollView>
 		</SafeAreaView>
 	);
 };

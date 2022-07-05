@@ -18,12 +18,20 @@ export default {
 		},
 		assetBundlePatterns: ["**/*"],
 		ios: {
+			bundleIdentifier: "com.josem.appcomeloso.app",
 			supportsTablet: true,
 		},
 		android: {
+			package: "com.josem.appcomeloso",
+
 			adaptiveIcon: {
 				foregroundImage: "./assets/adaptive-icon.png",
 				backgroundColor: "#FFFFFF",
+			},
+			config: {
+				googleMaps: {
+					apiKey: process.env.GOOGLE_MAPS_API_KEY,
+				},
 			},
 		},
 		web: {
