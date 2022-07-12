@@ -30,6 +30,7 @@ import { AuthUserContext } from "./utils/LoginContext";
 import Preferencias from "./screens/Preferencias";
 import RegisterName from "./screens/RegisterName";
 import ComelOSOmap from "./screens/ComelOSOmap";
+import DetailsRestaurant from "./screens/DetailsRestaurant";
 
 //Home Stack
 
@@ -40,6 +41,11 @@ const HomeStack = () => {
 			<HomeStackNavigator.Screen
 				name="HomeScreen"
 				component={HomeScreen}
+				options={{ headerShown: false }}
+			/>
+			<HomeStackNavigator.Screen
+				name="DetailsRestaurant"
+				component={DetailsRestaurant}
 				options={{ headerShown: false }}
 			/>
 		</HomeStackNavigator.Navigator>
@@ -55,6 +61,11 @@ const HistorialStack = () => {
 			<HistorialStackNavigator.Screen
 				name="Historial"
 				component={Historial}
+				options={{ headerShown: false }}
+			/>
+			<HistorialStackNavigator.Screen
+				name="DetailsRestaurant"
+				component={DetailsRestaurant}
 				options={{ headerShown: false }}
 			/>
 		</HistorialStackNavigator.Navigator>
@@ -303,10 +314,8 @@ const Navigation = () => {
 				onSnapshot(docRef, (snapShot) => {
 					if (snapShot.exists) {
 						setUserData(snapShot.data());
-						console.log("user data", snapShot.data());
 					} else {
 						setUserData(null);
-						console.log("No existe el usuario");
 					}
 				});
 			}
@@ -322,7 +331,6 @@ const Navigation = () => {
 			</View>
 		);
 	}
-	console.log(isLoading);
 	return <NavigationContainer>{verifyData()}</NavigationContainer>;
 };
 

@@ -9,15 +9,15 @@ const CuaGrande = () => {
 	return (
 		<View style={tw`shadow-xl rounded-3xl w-full`}>
 			<View
-				style={tw`bg-white rounded-3xl flex flex-col p-4 justify-around items-center`}>
+				style={tw`bg-white rounded-3xl flex flex-col py-4 px-3 justify-around items-center`}>
 				<View style={tw`pb-5`}>
-					<RestIcon style={tw`w-full`} width={140} height={150} />
+					<RestIcon style={tw``} width={100} height={110} />
 				</View>
 				<View style={tw`flex flex-col`}>
-					<Text style={tw`text-5xl text-pink-400 font-bold mb-1`}>
+					<Text style={tw`text-3xl text-pink-400 font-bold mb-1`}>
 						{userData.restaurantes_visitados.length}
 					</Text>
-					<Text style={tw`items-end justify-end text-xl`}>
+					<Text style={tw`items-end justify-end text-lg`}>
 						Restaurantes visitados
 					</Text>
 				</View>

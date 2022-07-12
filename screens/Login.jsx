@@ -17,7 +17,6 @@ const bgImage = require("../assets/bg/login.jpg");
 const Login = ({ navigation }) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-
 	const onHandleLogin = () => {
 		if (email !== "" && password !== "") {
 			signInWithEmailAndPassword(auth, email, password)

@@ -5,69 +5,37 @@ import {
 	TextInput,
 	TouchableOpacity,
 	FlatList,
+	ActivityIndicator,
 } from "react-native";
 import CardRest from "./CardRest";
 import tw from "twrnc";
+import { gql, useQuery } from "@apollo/client";
 
-const rest = [
-	{
-		id: 1,
-		title: "Restaurante 1",
-		address: "Calle 1",
-		phone: "123456789",
-		image:
-			"https://enlacocina.b-cdn.net/wp-content/uploads/2019/11/Consejos-para-atender-un-grupo-en-tu-restaurante.jpg",
-		description: "Descripcion del restaurante 1",
-	},
-	{
-		id: 2,
-		title: "Restaurante 2",
-		address: "Calle 2",
-		phone: "123456789",
-		image:
-			"https://enlacocina.b-cdn.net/wp-content/uploads/2019/11/Consejos-para-atender-un-grupo-en-tu-restaurante.jpg",
-		description: "Descripcion del restaurante 2",
-	},
-	{
-		id: 3,
-		title: "Restaurante 3",
-		address: "Calle 3",
-		phone: "123456789",
-		image:
-			"https://enlacocina.b-cdn.net/wp-content/uploads/2019/11/Consejos-para-atender-un-grupo-en-tu-restaurante.jpg",
-		description: "Descripcion del restaurante 3",
-	},
-	{
-		id: 4,
-		title: "Restaurante 4",
-		address: "Calle 4",
-		phone: "123456789",
-		image:
-			"https://enlacocina.b-cdn.net/wp-content/uploads/2019/11/Consejos-para-atender-un-grupo-en-tu-restaurante.jpg",
-		description: "Descripcion del restaurante 4",
-	},
-	{
-		id: 5,
-		title: "Restaurante 5",
-		address: "Calle 5",
-		phone: "123456789",
-		image:
-			"https://enlacocina.b-cdn.net/wp-content/uploads/2019/11/Consejos-para-atender-un-grupo-en-tu-restaurante.jpg",
-		description: "Descripcion del restaurante 5",
-	},
-];
+const GET_REST = gql`
+	query Query {
+		getRestaurantes {
+			nombre
+			id
+			latitud
+			longitud
+			imagen
+			descripcion
+		}
+	}
+`;
 
-const RestList = () => {
-	const [search, onChangeSearch] = useState("");
+const RestList = ({ navigation }) => {
+	const { loading, error, data } = useQuery(GET_REST);
+	if (loading) return <ActivityIndicator size={150} color="#ea4c4c" />;
+	if (error) return <Text>Error :(</Text>;
+	console.log(data.getRestaurantes);
 
 	return (
-		<View>
+		<View style={tw`h-full`}>
 			<View style={tw`mx-5 flex-row bg-white rounded-3xl px-3 pt-1 pb-1 mb-5`}>
 				<TextInput
 					style={tw`flex-auto text-xl bg-white rounded-xl pl-3 pt-1 pb-1`}
 					placeholder="Buscar"
-					onChangeText={(text) => onChangeSearch(text)}
-					value={search}
 				/>
 				<TouchableOpacity>
 					<View style={tw`bg-rose-300 rounded-xl px-2 pt-1 pb-1`}>
@@ -77,10 +45,20 @@ const RestList = () => {
 			</View>
 			<View style={tw`mx-5`}>
 				<FlatList
-					data={rest}
+					style={tw`h-150`}
+					data={data.getRestaurantes}
 					keyExtractor={(item) => item.id}
 					renderItem={({ item, index }) => {
-						return <CardRest item={item} />;
+						return (
+							<TouchableOpacity
+								onPress={() => {
+									console.log(item);
+									alert(`${item}`);
+									navigation.navigate("DetailsRestaurant", { item });
+								}}>
+								<CardRest item={item} />
+							</TouchableOpacity>
+						);
 					}}
 					ItemSeparatorComponent={() => <View style={tw`h-4`} />}
 				/>

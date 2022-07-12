@@ -8,11 +8,11 @@ const CardRest = ({ item }) => {
 			<ImageBackground
 				style={tw`rounded-2xl h-full flex`}
 				source={{
-					uri: item.imagen,
+					uri: item.image,
 				}}
 				resizeMode="cover">
 				<View style={tw`pl-5 bg-white/50 justify-center h-full`}>
-					<Text style={tw`text-2xl`}>{item.nombre}</Text>
+					<Text style={tw`text-2xl`}>{item.title}</Text>
 				</View>
 			</ImageBackground>
 		</View>

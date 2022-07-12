@@ -1,11 +1,12 @@
 import { Icon } from "@rneui/base";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
 	FlatList,
 	Text,
 	TouchableOpacity,
 	View,
 	ScrollView,
+	ActivityIndicator,
 } from "react-native";
 import tw from "twrnc";
 import Constants from "expo-constants";
@@ -15,6 +16,8 @@ import { useDispatch } from "react-redux";
 import ItemListRecomend from "../components/ComelOso/ItemListRecomend";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Location from "expo-location";
+import { gql, useQuery, useLazyQuery } from "@apollo/client";
+import { AuthUserContext } from "../utils/LoginContext";
 
 const lugares = [
 	{
@@ -79,20 +82,67 @@ const lugares = [
 	},
 ];
 
+const GET_REST = gql`
+	query GetRestaurantesCerca(
+		$latitud1: Float
+		$longitud1: Float
+		$etiquetas2: [String]
+	) {
+		getRestaurantesCerca(
+			latitud1: $latitud1
+			longitud1: $longitud1
+			etiquetas2: $etiquetas2
+		) {
+			nombre
+			direccion
+			imagen
+			descripcion
+			latitud
+			longitud
+			id
+		}
+	}
+`;
+
 const ComelOSO = ({ navigation }) => {
 	const [userCords, setUserCords] = useState(null);
-
+	const [isLoading, setIsLoading] = useState(false);
+	const { userData } = useContext(AuthUserContext);
 	const dispatch = useDispatch();
+	const [getRests, result] = useLazyQuery(GET_REST);
+	const [rests, setRests] = useState([]);
+
+	useEffect(() => {
+		if (userCords !== null) {
+			getRests({
+				variables: {
+					latitud1: -16.456652,
+					longitud1: -71.529258,
+					etiquetas2: userData.preferencias,
+				},
+			});
+
+			if (result.data) {
+				setRests(result.data.getRestaurantesCerca);
+				console.log(userCords.longitude);
+				console.log(userCords.latitude);
+				console.log(userData.preferencias);
+				console.log(result.data.getRestaurantesCerca);
+			}
+		}
+	}, [userCords]);
 
 	const getLocation = async () => {
+		setIsLoading(true);
 		const { status } = await Location.requestForegroundPermissionsAsync();
 		if (status !== "granted") {
 			alert("No se pudo obtener la ubicación");
 			return;
 		}
 		const location = await Location.getCurrentPositionAsync({});
-		console.log(location);
+
 		setUserCords(location.coords);
+		setIsLoading(false);
 	};
 
 	return (
@@ -101,85 +151,62 @@ const ComelOSO = ({ navigation }) => {
 			<TouchableOpacity
 				onPress={() => {
 					getLocation();
-					console.log("Cordenadas de usuario", userCords);
 				}}
 				style={tw`p-2 bg-orange-300 rounded-full w-45 h-45 mt-4 items-center justify-center`}>
-				<Icon
-					name="compass-outline"
-					color={"white"}
-					type="material-community"
-					size={150}
-				/>
+				{isLoading ? (
+					<ActivityIndicator size={150} color="#ea4c4c" />
+				) : (
+					<Icon
+						name="compass-outline"
+						color={"white"}
+						type="material-community"
+						size={150}
+					/>
+				)}
 			</TouchableOpacity>
 			<View style={tw`mx-5 w-full p-5`}>
-				<View style={tw`mb-5`}>
-					<GooglePlacesAutocomplete
-						styles={{
-							container: {
-								flex: 0,
-							},
-							textInput: {
-								fontSize: 18,
-							},
-						}}
-						placeholder="Search"
-						query={{
-							key: Constants.manifest.extra.googleMapsKey,
-							language: "en",
-						}}
-						onPress={(data, details = null) => {
-							console.log("data----------------------------", data);
-							console.log("details-------------------------", details);
-							dispatch(
-								setOrigin({
-									location: details.geometry.location,
-									description: data.description,
-								})
-							);
-							dispatch(setDestination(null));
-						}}
-						nearbyPlacesAPI="GooglePlacesSearch"
-						debounce={400}
-						minLength={2}
-						enablePoweredByContainer={false}
-					/>
-				</View>
-				<View style={tw`h-70 rounded-2xl overflow-hidden`}>
-					<FlatList
-						style={tw`rounded-2xl overflow-hidden`}
-						data={lugares}
-						keyExtractor={(item) => item.id}
-						ItemSeparatorComponent={() => <View style={tw`h-2`} />}
-						renderItem={({ item, index }) => {
-							return (
-								<TouchableOpacity
-									onPress={() => {
-										dispatch(
-											setDestination({
-												location: item.coods,
-												name: item.name,
-												address: item.address,
-												img: item.img,
-											})
-										);
-										console.log("cordenadas de usuario", userCords);
-										dispatch(
-											setOrigin({
-												location: userCords,
-												description: "Tu ubicación",
-											})
-										);
-										navigation.navigate("ComelOSOmap");
-									}}>
-									<ItemListRecomend
-										name={item.name}
-										img={item.img}
-										address={item.address}
-									/>
-								</TouchableOpacity>
-							);
-						}}
-					/>
+				<View style={tw`h-90 rounded-2xl overflow-hidden`}>
+					{rests.length > 0 ? (
+						<FlatList
+							style={tw`rounded-2xl overflow-hidden`}
+							data={rests}
+							keyExtractor={(item) => item.id}
+							ItemSeparatorComponent={() => <View style={tw`h-2`} />}
+							renderItem={({ item, index }) => {
+								return (
+									<TouchableOpacity
+										onPress={() => {
+											dispatch(
+												setDestination({
+													location: { lat: item.latitud, lng: item.longitud },
+													name: item.nombre,
+													address: item.direccion,
+													img: item.imagen,
+												})
+											);
+											console.log("cordenadas de usuario", userCords);
+											dispatch(
+												setOrigin({
+													location: userCords,
+													description: "Tu ubicación",
+												})
+											);
+											navigation.navigate("ComelOSOmap");
+										}}>
+										<ItemListRecomend
+											name={item.nombre}
+											img={item.imagen}
+											address={item.direccion}
+										/>
+									</TouchableOpacity>
+								);
+							}}
+						/>
+					) : (
+						<Text style={tw`text-center text-2xl font-light`}>
+							No hay restaurantes cerca de ti
+						</Text>
+					)}
 				</View>
 			</View>
 		</SafeAreaView>

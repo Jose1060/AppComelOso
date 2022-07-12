@@ -5,9 +5,8 @@ import Cuadricula from "../components/home/Cuadricula";
 import Recuerdos from "../components/home/Recuerdos";
 import { AuthUserContext } from "../utils/LoginContext";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
 	const { userData } = useContext(AuthUserContext);
-
 	return (
 		<SafeAreaView style={tw`flex flex-col h-full bg-yellow-200`}>
 			<View style={tw`mt-10 ml-5`}>
@@ -16,7 +15,7 @@ const HomeScreen = () => {
 			<View>
 				<ScrollView>
 					<Cuadricula />
-					<Recuerdos />
+					<Recuerdos navigation={navigation} />
 				</ScrollView>
 			</View>
 		</SafeAreaView>

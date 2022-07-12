@@ -1,36 +1,44 @@
-import { View, Image, Text, FlatList, SafeAreaView } from "react-native";
+import { View, Image, Text, FlatList, TouchableOpacity } from "react-native";
 import tw from "twrnc";
 import Recuerdos_Wave from "../icons/Waves/Recuerdos_Wave";
 import CardCarousel from "./CardCarousel";
-
+import { useNavigation } from "@react-navigation/native";
 const rec = [
 	{
 		id: 1,
 		title: "Recuerdo 1",
 		description: "Descripcion del recuerdo 1",
-		img: "recuerdo",
+		img: "https://www.enter.co/wp-content/uploads/2017/02/menu-restaurant-vintage-tableFINAL-768x432.jpg",
+		val: "10",
+		calificaciones: "5",
 	},
 	{
 		id: 2,
 		title: "Recuerdo 2",
 		description: "Descripcion del recuerdo 2",
-		img: "recuerdo",
+		img: "https://www.enter.co/wp-content/uploads/2017/02/menu-restaurant-vintage-tableFINAL-768x432.jpg",
+		val: "5",
+		calificaciones: "10",
 	},
 	{
 		id: 3,
 		title: "Recuerdo 3",
 		description: "Descripcion del recuerdo 3",
-		img: "recuerdo",
+		img: "https://www.enter.co/wp-content/uploads/2017/02/menu-restaurant-vintage-tableFINAL-768x432.jpg",
+		val: "7",
+		calificaciones: "30",
 	},
 	{
 		id: 4,
 		title: "Recuerdo 4",
 		description: "Descripcion del recuerdo 4",
-		img: "recuerdo",
+		img: "https://www.enter.co/wp-content/uploads/2017/02/menu-restaurant-vintage-tableFINAL-768x432.jpg",
+		val: "8",
+		calificaciones: "50",
 	},
 ];
 
-const Recuerdos = () => {
+const Recuerdos = ({ navigation }) => {
 	return (
 		<View style={tw``}>
 			<View style={tw`relative h-50 overflow-hidden`}>
@@ -55,7 +63,12 @@ const Recuerdos = () => {
 					renderItem={({ item, index }) => {
 						return (
 							<View key={item.id}>
-								<CardCarousel item={item} />
+								<TouchableOpacity
+									onPress={() => {
+										navigation.navigate("DetailsRestaurant", { item });
+									}}>
+									<CardCarousel item={item} />
+								</TouchableOpacity>
 							</View>
 						);
 					}}
