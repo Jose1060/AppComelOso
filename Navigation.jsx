@@ -294,6 +294,7 @@ const Navigation = () => {
 	const verifyData = () => {
 		if (user !== null) {
 			if (userData !== null) {
+				console.log(userData);
 				if (userData.preferencias.length > 0) {
 					return <MyTabs />;
 				} else {

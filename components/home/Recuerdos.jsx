@@ -40,7 +40,7 @@ const rec = [
 
 const Recuerdos = ({ navigation }) => {
 	return (
-		<View style={tw``}>
+		<View>
 			<View style={tw`relative h-50 overflow-hidden`}>
 				<Image
 					source={require("./../../assets/imagenes/oso_inicio.png")}

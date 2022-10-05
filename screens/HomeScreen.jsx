@@ -15,7 +15,7 @@ const HomeScreen = ({ navigation }) => {
 			<View>
 				<ScrollView>
 					<Cuadricula />
-					<Recuerdos navigation={navigation} />
+					<Recuerdos navigation={navigation} />;
 				</ScrollView>
 			</View>
 		</SafeAreaView>
