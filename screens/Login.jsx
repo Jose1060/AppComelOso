@@ -14,6 +14,7 @@ import { AuthUserContext } from "../utils/LoginContext";
 
 const bgImage = require("../assets/bg/login.jpg");
 
+// Ventana de Login, inicio de sesion de usuario
 const Login = ({ navigation }) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
