@@ -31,7 +31,7 @@ const RestList = ({ navigation }) => {
 	console.log(data.getRestaurantes);
 
 	return (
-		<View style={tw`h-full`}>
+		<View style={tw`h-full `}>
 			<View style={tw`mx-5 flex-row bg-white rounded-3xl px-3 pt-1 pb-1 mb-5`}>
 				<TextInput
 					style={tw`flex-auto text-xl bg-white rounded-xl pl-3 pt-1 pb-1`}
@@ -43,7 +43,7 @@ const RestList = ({ navigation }) => {
 					</View>
 				</TouchableOpacity>
 			</View>
-			<View style={tw`mx-5`}>
+			<View style={tw`mx-6`}>
 				<FlatList
 					style={tw`h-150`}
 					data={data.getRestaurantes}

@@ -44,7 +44,7 @@ const Recuerdos = ({ navigation }) => {
 			<View style={tw`relative h-50 overflow-hidden`}>
 				<Image
 					source={require("./../../assets/imagenes/oso_inicio.png")}
-					style={tw`w-full h-full`}
+					style={tw`w-[100%] h-full`}
 				/>
 				<Recuerdos_Wave style={tw`absolute bottom-0 left-0 w-full h-11 z-20`} />
 			</View>

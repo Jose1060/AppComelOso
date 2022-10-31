@@ -7,12 +7,12 @@ import { Icon } from "@rneui/base";
 const ItemListRecomend = (props) => {
 	return (
 		<View
-			style={tw`w-full flex flex-row px-4 py-2 bg-white rounded-3xl items-center justify-between`}>
+			style={tw`w-full flex flex-row px-5 py-3 bg-white rounded-3xl items-center justify-between`}>
 			<Image
 				source={{ uri: props.img }}
 				style={tw`w-12 h-12 rounded-full mr-5`}
 			/>
-			<View style={tw`flex flex-col w-50`}>
+			<View style={tw`flex flex-col max-w-50`}>
 				<Text style={tw`text-black text-lg`}>{props.name}</Text>
 				<Text style={tw`text-black text-sm`}>{props.address}</Text>
 			</View>

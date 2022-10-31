@@ -8,7 +8,7 @@ import { store } from "./utils/store";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 const client = new ApolloClient({
-	uri: "https://restaurantes-production.up.railway.app/graphql",
+	uri: "https://restaurantes-production-e30d.up.railway.app/graphql",
 	cache: new InMemoryCache(),
 });
 
