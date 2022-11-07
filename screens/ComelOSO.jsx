@@ -116,8 +116,8 @@ const ComelOSO = ({ navigation }) => {
 		if (userCords !== null) {
 			getRests({
 				variables: {
-					latitud1: -16.416962723339463,
-					longitud1: -71.52706942937628,
+					latitud1: userCords.latitude,
+					longitud1: userCords.logitude,
 					etiquetas2: userData.preferencias,
 				},
 			});
