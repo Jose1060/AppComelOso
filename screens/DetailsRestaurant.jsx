@@ -6,9 +6,23 @@ import {
 	FlatList,
 	TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useContext, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
+import { AntDesign } from "@expo/vector-icons";
+import { firestore } from "../config/firebase";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import {
+	AuthenticatedUserProvider,
+	AuthUserContext,
+} from "../utils/LoginContext";
+import { useEffect } from "react";
+
+const handleFav = async (user, idRes) => {
+	await updateDoc(doc(firestore, "users", user), {
+		restaurantes_visitados_favoritos: arrayUnion(idRes),
+	});
+};
 
 const data = [
 	{
@@ -36,14 +50,44 @@ const data = [
 
 const DetailsRestaurant = ({ route, navigation }) => {
 	const { item } = route.params;
+	const { userData } = useContext(AuthUserContext);
+	const [added, setAdded] = useState("false");
+
+	useEffect(() => {
+		const find = userData.restaurantes_visitados_favoritos.find((item) => {
+			return item == item.id;
+		});
+		setAdded(find);
+	}, [userData]);
+
 	return (
 		<SafeAreaView>
 			<ScrollView>
 				<View>
-					<Image source={{ uri: item.imagen }} style={tw`h-90`} />
+					<View style={tw`relative pb-8`}>
+						<Image
+							source={{ uri: item.imagen }}
+							style={tw`h-90 rounded-b-10`}
+						/>
 
+						<TouchableOpacity
+							onPress={() => {
+								console.log(userData.uid);
+								handleFav(userData.uid, item.id);
+							}}
+							style={tw`rounded-full bg-red-600 p-5 absolute bottom-0 right-10`}>
+							<AntDesign
+								name="heart"
+								size={40}
+								color={added ? "red" : "white"}
+								style={tw``}
+							/>
+						</TouchableOpacity>
+					</View>
 					<View style={tw`flex flex-col items-center p-5 pb-10`}>
-						<Text style={tw`text-[30px] text-center mb-5 `}>{item.nombre}</Text>
+						<Text style={tw`text-[30px] text-center mb-5 font-bold`}>
+							{item.nombre}
+						</Text>
 						<Text style={tw`text-sm`}>
 							{item.descripcion ? item.descripcion : "No hay descripcion :c"}
 						</Text>
@@ -88,35 +132,23 @@ const DetailsRestaurant = ({ route, navigation }) => {
 									<Text style={tw`text-lg font-bold`}>💎</Text>
 								</View>
 							</TouchableOpacity>
-							<Text style={tw`text-sm text-center`}>
-								Diamante corona ejecutivo
-							</Text>
+							<Text style={tw`text-sm text-center`}>Diamante</Text>
 						</View>
 					</View>
 				</ScrollView>
-			</ScrollView>
-			<View style={tw`bg-white pt-5 rounded-3xl`}>
-				<Text style={tw`text-2xl text-center mb-5 `}>Comentarios</Text>
-				<FlatList
-					data={data}
-					nestedScrollEnabled
-					ItemSeparatorComponent={() => (
-						<View style={tw`h-2 w-full  items-center justify-center`}>
-							<View style={tw`bg-black h-[0.5] w-40`} />
-						</View>
-					)}
-					renderItem={({ item }) => (
-						<View style={tw`flex flex-col items-center p-5 `}>
+				<View style={tw`bg-white pt-5 rounded-3xl`}>
+					<Text style={tw`text-2xl text-center mb-5 `}>Comentarios</Text>
+					{data.map((item) => (
+						<View style={tw`flex flex-col items-center p-5`} key={item.id}>
 							<Text style={tw`text-sm`}>{item.comentario}</Text>
 							<View style={tw`flex-col justify-end items-end w-full pr-5`}>
 								<Text style={tw`text-sm`}>{item.nombre}</Text>
 								<Text style={tw`text-sm`}>{item.fecha}</Text>
 							</View>
 						</View>
-					)}
-					keyExtractor={(item) => item.id}
-				/>
-			</View>
+					))}
+				</View>
+			</ScrollView>
 		</SafeAreaView>
 	);
 };

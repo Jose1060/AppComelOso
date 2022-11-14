@@ -52,8 +52,6 @@ const RestList = ({ navigation }) => {
 						return (
 							<TouchableOpacity
 								onPress={() => {
-									console.log(item);
-									alert(`${item}`);
 									navigation.navigate("DetailsRestaurant", { item });
 								}}>
 								<CardRest item={item} />

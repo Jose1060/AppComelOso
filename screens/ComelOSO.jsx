@@ -114,19 +114,20 @@ const ComelOSO = ({ navigation }) => {
 
 	useEffect(() => {
 		if (userCords !== null) {
+			console.log("longitud: ", userCords.longitude);
+			console.log("latitud: ", userCords.latitude);
+			console.log(userData.preferencias);
+
 			getRests({
 				variables: {
 					latitud1: userCords.latitude,
-					longitud1: userCords.logitude,
+					longitud1: userCords.longitude,
 					etiquetas2: userData.preferencias,
 				},
 			});
 
 			if (result.data) {
 				setRests(result.data.getRestaurantesCerca);
-				console.log(userCords.longitude);
-				console.log(userCords.latitude);
-				console.log(userData.preferencias);
 				console.log(result.data.getRestaurantesCerca);
 			}
 		}
@@ -140,8 +141,8 @@ const ComelOSO = ({ navigation }) => {
 			return;
 		}
 		const location = await Location.getCurrentPositionAsync({});
-
 		setUserCords(location.coords);
+		console.log(userCords);
 		setIsLoading(false);
 	};
 

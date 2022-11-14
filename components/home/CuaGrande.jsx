@@ -15,7 +15,7 @@ const CuaGrande = () => {
 				</View>
 				<View style={tw`flex flex-col`}>
 					<Text style={tw`text-3xl text-pink-400 font-bold mb-1`}>
-						{userData.restaurantes_visitados.length}
+						{userData.restaurantes_visitados_favoritos.length}
 					</Text>
 					<Text style={tw`items-end justify-end text-lg`}>
 						Restaurantes visitados

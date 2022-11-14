@@ -313,7 +313,8 @@ const Navigation = () => {
 				const docRef = doc(firestore, "users", authenticatedUser.uid);
 				onSnapshot(docRef, (snapShot) => {
 					if (snapShot.exists) {
-						setUserData(snapShot.data());
+						setUserData({ ...snapShot.data(), uid: authenticatedUser.uid });
+						console.log({ ...snapShot.data(), uid: authenticatedUser.uid });
 					} else {
 						setUserData(null);
 					}

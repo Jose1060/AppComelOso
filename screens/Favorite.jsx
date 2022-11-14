@@ -9,7 +9,7 @@ const Favorite = () => {
 	return (
 		<SafeAreaView style={tw`bg-red-100 min-h-full`}>
 			<View style={tw`flex flex-col justify-center items-center mt-8 mb-7`}>
-				<Text style={tw`text-4xl`}>Favoritos ❤️</Text>
+				<Text style={tw`text-4xl`}>Favoritos</Text>
 			</View>
 			<RestList />
 		</SafeAreaView>
