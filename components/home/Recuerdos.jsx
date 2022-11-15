@@ -3,42 +3,28 @@ import tw from "twrnc";
 import Recuerdos_Wave from "../icons/Waves/Recuerdos_Wave";
 import CardCarousel from "./CardCarousel";
 import { useNavigation } from "@react-navigation/native";
-const rec = [
-	{
-		id: 1,
-		title: "Recuerdo 1",
-		description: "Descripcion del recuerdo 1",
-		img: "https://www.enter.co/wp-content/uploads/2017/02/menu-restaurant-vintage-tableFINAL-768x432.jpg",
-		val: "10",
-		calificaciones: "5",
-	},
-	{
-		id: 2,
-		title: "Recuerdo 2",
-		description: "Descripcion del recuerdo 2",
-		img: "https://www.enter.co/wp-content/uploads/2017/02/menu-restaurant-vintage-tableFINAL-768x432.jpg",
-		val: "5",
-		calificaciones: "10",
-	},
-	{
-		id: 3,
-		title: "Recuerdo 3",
-		description: "Descripcion del recuerdo 3",
-		img: "https://www.enter.co/wp-content/uploads/2017/02/menu-restaurant-vintage-tableFINAL-768x432.jpg",
-		val: "7",
-		calificaciones: "30",
-	},
-	{
-		id: 4,
-		title: "Recuerdo 4",
-		description: "Descripcion del recuerdo 4",
-		img: "https://www.enter.co/wp-content/uploads/2017/02/menu-restaurant-vintage-tableFINAL-768x432.jpg",
-		val: "8",
-		calificaciones: "50",
-	},
-];
+import React, { useContext, useState, useEffect } from "react";
+import { AuthUserContext } from "../../utils/LoginContext.js";
+import { gql, useLazyQuery, useQuery } from "@apollo/client";
+
+const GET_REST = gql`
+	query Variosrestaurantes($id: [String]) {
+		Variosrestaurantes(id: $id) {
+			nombre
+			direccion
+			imagen
+			descripcion
+			latitud
+			longitud
+			id
+		}
+	}
+`;
 
 const Recuerdos = ({ navigation }) => {
+	const { userData } = useContext(AuthUserContext);
+	const [getRests, result] = useLazyQuery(GET_REST);
+
 	return (
 		<View style={tw``}>
 			<View style={tw`relative h-50 overflow-hidden`}>
@@ -53,7 +39,7 @@ const Recuerdos = ({ navigation }) => {
 					<Text style={tw`mt-3 ml-3 text-2xl`}>Ver Recuerdos:</Text>
 				</View>
 				<FlatList
-					data={rec}
+					data={userData.restaurantes_visitados_favoritos}
 					horizontal={true}
 					keyExtractor={(item) => item.id + "-recuerdo-" + item.title}
 					showsHorizontalScrollIndicator={false}

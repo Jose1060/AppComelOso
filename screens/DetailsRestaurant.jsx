@@ -6,19 +6,23 @@ import {
 	FlatList,
 	TouchableOpacity,
 } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
 import { AntDesign } from "@expo/vector-icons";
 import { firestore } from "../config/firebase";
-import { arrayUnion, doc, updateDoc } from "firebase/firestore";
-import {
-	AuthenticatedUserProvider,
-	AuthUserContext,
-} from "../utils/LoginContext";
-import { useEffect } from "react";
+import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { AuthUserContext } from "../utils/LoginContext";
+import { FontAwesome5 } from "@expo/vector-icons";
 
-const handleFav = async (user, idRes) => {
+const handleFav = async (user, idRes, added) => {
+	if (added) {
+		await updateDoc(doc(firestore, "users", user), {
+			restaurantes_visitados_favoritos: arrayRemove(idRes),
+		});
+		return;
+	}
+
 	await updateDoc(doc(firestore, "users", user), {
 		restaurantes_visitados_favoritos: arrayUnion(idRes),
 	});
@@ -54,9 +58,10 @@ const DetailsRestaurant = ({ route, navigation }) => {
 	const [added, setAdded] = useState("false");
 
 	useEffect(() => {
-		const find = userData.restaurantes_visitados_favoritos.find((item) => {
-			return item == item.id;
-		});
+		const even = (element) => element == item.id;
+		const find = userData.restaurantes_visitados_favoritos.some(even);
+		console.log(find);
+		console.log(added);
 		setAdded(find);
 	}, [userData]);
 
@@ -72,16 +77,15 @@ const DetailsRestaurant = ({ route, navigation }) => {
 
 						<TouchableOpacity
 							onPress={() => {
-								console.log(userData.uid);
-								handleFav(userData.uid, item.id);
+								console.log(userData);
+								handleFav(userData.uid, item.id, added);
 							}}
 							style={tw`rounded-full bg-red-600 p-5 absolute bottom-0 right-10`}>
-							<AntDesign
-								name="heart"
-								size={40}
-								color={added ? "red" : "white"}
-								style={tw``}
-							/>
+							{added ? (
+								<FontAwesome5 name="heart-broken" size={40} color="white" />
+							) : (
+								<AntDesign name="heart" size={40} color="white" style={tw``} />
+							)}
 						</TouchableOpacity>
 					</View>
 					<View style={tw`flex flex-col items-center p-5 pb-10`}>
