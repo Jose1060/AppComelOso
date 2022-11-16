@@ -11,23 +11,9 @@ import tw from "twrnc";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { AuthUserContext } from "../../utils/LoginContext.js";
 
-const GET_VARIOS = gql`
+const GET_REST = gql`
 	query Variosrestaurantes($variosrestaurantesId: [ID]) {
 		Variosrestaurantes(id: $variosrestaurantesId) {
-			nombre
-			direccion
-			imagen
-			descripcion
-			latitud
-			longitud
-			id
-		}
-	}
-`;
-
-const GET_All = gql`
-	query GetRestaurantes {
-		getRestaurantes {
 			nombre
 			direccion
 			imagen
@@ -42,10 +28,24 @@ const GET_All = gql`
 const RestList = ({ navigation }) => {
 	const [search, onChangeSearch] = useState("");
 	const { userData } = useContext(AuthUserContext);
-	const { loading, error, data } = useQuery(GET_All);
 	const [rests, setRests] = useState([]);
+	const [getRests, result] = useLazyQuery(GET_REST);
+	const [loading, setLoading] = useState(false);
 
-	useEffect(() => {}, [userData]);
+	useEffect(() => {
+		//console.log("restaurantes", userData.restaurantes_visitados_favoritos);
+		setLoading(true);
+		console.log("Empezo", loading);
+		getRests({
+			variables: {
+				variosrestaurantesId: userData.restaurantes_visitados_favoritos,
+			},
+		}).then((resp) => {
+			console.log(resp.data.Variosrestaurantes[5]);
+			setRests(resp.data.Variosrestaurantes);
+			console.log("Acabo", loading);
+		});
+	}, [userData]);
 
 	return (
 		<View style={tw`h-full`}>
