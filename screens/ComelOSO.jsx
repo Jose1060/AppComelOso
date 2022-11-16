@@ -19,69 +19,6 @@ import * as Location from "expo-location";
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import { AuthUserContext } from "../utils/LoginContext";
 
-const lugares = [
-	{
-		id: 1,
-		name: "Casa de la comida",
-		address: "Calle de la comida",
-		coods: {
-			lat: -16.403205763546257,
-			lng: -71.52293249251396,
-		},
-		img: "https://picsum.photos/200/300",
-	},
-	{
-		id: 2,
-		name: "Restaurante Ceviche",
-		address: "Calle de la comida",
-		coods: {
-			lat: -16.399413561638138,
-			lng: -71.52145447922516,
-		},
-		img: "https://picsum.photos/200/300",
-	},
-	{
-		id: 3,
-		name: "Restaurante Patita",
-		address: "Calle de la comida",
-		coods: {
-			lat: -16.399261253092654,
-			lng: -71.52167467902146,
-		},
-		img: "https://picsum.photos/200/300",
-	},
-	{
-		id: 4,
-		name: "Restaurante Paco",
-		address: "Calle de la comida",
-		coods: {
-			lat: -16.398715757182295,
-			lng: -71.53702362032118,
-		},
-		img: "https://picsum.photos/200/300",
-	},
-	{
-		id: 5,
-		name: "Restaurante Pancho",
-		address: "Calle de la comida",
-		coods: {
-			lat: -16.398715757182295,
-			lng: -71.53702362032118,
-		},
-		img: "https://picsum.photos/200/300",
-	},
-	{
-		id: 6,
-		name: "Tablon",
-		address: "Calle de la comida",
-		coods: {
-			lat: -16.399263530288216,
-			lng: -71.52168088309791,
-		},
-		img: "https://picsum.photos/200/300",
-	},
-];
-
 const GET_REST = gql`
 	query GetRestaurantesCerca(
 		$latitud1: Float
@@ -130,6 +67,7 @@ const ComelOSO = ({ navigation }) => {
 				setRests(result.data.getRestaurantesCerca);
 				console.log(result.data.getRestaurantesCerca);
 			}
+			console.log(result.data);
 		}
 	}, [userCords]);
 

@@ -152,7 +152,6 @@ const Preferencias = () => {
 												item.presionado = false;
 											}
 											onPrefSelect(item.preferencia);
-											console.log(item.presionado);
 										}}>
 										<Etiqueta
 											{...item}
@@ -186,7 +185,6 @@ const Preferencias = () => {
 												item.presionado = false;
 											}
 											onPrefSelect(item.preferencia);
-											console.log(item.presionado);
 										}}>
 										<Etiqueta
 											{...item}
@@ -220,7 +218,6 @@ const Preferencias = () => {
 												item.presionado = false;
 											}
 											onPrefSelect(item.preferencia);
-											console.log(item.presionado);
 										}}>
 										<Etiqueta
 											{...item}
@@ -234,7 +231,6 @@ const Preferencias = () => {
 						<TouchableOpacity
 							style={tw`bg-green-500 rounded-3xl px-5 py-2 mt-15`}
 							onPress={async () => {
-								console.log(prefer);
 								if (prefer.length >= 3) {
 									await updateDoc(doc(firestore, "users", user.uid), {
 										preferencias: prefer,

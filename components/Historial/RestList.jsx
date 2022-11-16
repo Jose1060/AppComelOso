@@ -28,7 +28,6 @@ const RestList = ({ navigation }) => {
 	const { loading, error, data } = useQuery(GET_REST);
 	if (loading) return <ActivityIndicator size={150} color="#ea4c4c" />;
 	if (error) return <Text>Error :(</Text>;
-	console.log(data.getRestaurantes);
 
 	return (
 		<View style={tw`h-full `}>

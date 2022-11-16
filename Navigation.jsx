@@ -314,7 +314,6 @@ const Navigation = () => {
 				onSnapshot(docRef, (snapShot) => {
 					if (snapShot.exists) {
 						setUserData({ ...snapShot.data(), uid: authenticatedUser.uid });
-						console.log({ ...snapShot.data(), uid: authenticatedUser.uid });
 					} else {
 						setUserData(null);
 					}

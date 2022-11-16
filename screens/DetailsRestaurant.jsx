@@ -60,8 +60,6 @@ const DetailsRestaurant = ({ route, navigation }) => {
 	useEffect(() => {
 		const even = (element) => element == item.id;
 		const find = userData.restaurantes_visitados_favoritos.some(even);
-		console.log(find);
-		console.log(added);
 		setAdded(find);
 	}, [userData]);
 
@@ -77,7 +75,6 @@ const DetailsRestaurant = ({ route, navigation }) => {
 
 						<TouchableOpacity
 							onPress={() => {
-								console.log(userData);
 								handleFav(userData.uid, item.id, added);
 							}}
 							style={tw`rounded-full bg-red-600 p-5 absolute bottom-0 right-10`}>

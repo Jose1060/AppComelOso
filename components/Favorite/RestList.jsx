@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -8,93 +8,44 @@ import {
 } from "react-native";
 import CardRest from "./CardRest";
 import tw from "twrnc";
+import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { AuthUserContext } from "../../utils/LoginContext.js";
 
-const rest = [
-	{
-		id: 1,
-		title: "Restaurante 1",
-		address: "Calle 1",
-		phone: "123456789",
-		image:
-			"https://enlacocina.b-cdn.net/wp-content/uploads/2019/11/Consejos-para-atender-un-grupo-en-tu-restaurante.jpg",
-		description: "Descripcion del restaurante 1",
-	},
-	{
-		id: 2,
-		title: "Restaurante 2",
-		address: "Calle 2",
-		phone: "123456789",
-		image:
-			"https://enlacocina.b-cdn.net/wp-content/uploads/2019/11/Consejos-para-atender-un-grupo-en-tu-restaurante.jpg",
-		description: "Descripcion del restaurante 2",
-	},
-	{
-		id: 3,
-		title: "Restaurante 3",
-		address: "Calle 3",
-		phone: "123456789",
-		image:
-			"https://enlacocina.b-cdn.net/wp-content/uploads/2019/11/Consejos-para-atender-un-grupo-en-tu-restaurante.jpg",
-		description: "Descripcion del restaurante 3",
-	},
-	{
-		id: 4,
-		title: "Restaurante 4",
-		address: "Calle 4",
-		phone: "123456789",
-		image:
-			"https://enlacocina.b-cdn.net/wp-content/uploads/2019/11/Consejos-para-atender-un-grupo-en-tu-restaurante.jpg",
-		description: "Descripcion del restaurante 4",
-	},
-	{
-		id: 5,
-		title: "Restaurante 5",
-		address: "Calle 5",
-		phone: "123456789",
-		image:
-			"https://enlacocina.b-cdn.net/wp-content/uploads/2019/11/Consejos-para-atender-un-grupo-en-tu-restaurante.jpg",
-		description: "Descripcion del restaurante 5",
-	},
-	{
-		id: 6,
-		title: "Restaurante 6",
-		address: "Calle 6",
-		phone: "123456789",
-		image:
-			"https://enlacocina.b-cdn.net/wp-content/uploads/2019/11/Consejos-para-atender-un-grupo-en-tu-restaurante.jpg",
-		description: "Descripcion del restaurante 6",
-	},
-	{
-		id: 7,
-		title: "Restaurante 7",
-		address: "Calle 7",
-		phone: "123456789",
-		image:
-			"https://enlacocina.b-cdn.net/wp-content/uploads/2019/11/Consejos-para-atender-un-grupo-en-tu-restaurante.jpg",
-		description: "Descripcion del restaurante 7",
-	},
-	{
-		id: 8,
-		title: "Restaurante 8",
-		address: "Calle 8",
-		phone: "123456789",
-		image:
-			"https://enlacocina.b-cdn.net/wp-content/uploads/2019/11/Consejos-para-atender-un-grupo-en-tu-restaurante.jpg",
-		description: "Descripcion del restaurante 8",
-	},
-	{
-		id: 9,
-		title: "Restaurante 9",
-		address: "Calle 9",
-		phone: "123456789",
-		image:
-			"https://enlacocina.b-cdn.net/wp-content/uploads/2019/11/Consejos-para-atender-un-grupo-en-tu-restaurante.jpg",
-		description: "Descripcion del restaurante 9",
-	},
-];
+const GET_VARIOS = gql`
+	query Variosrestaurantes($variosrestaurantesId: [ID]) {
+		Variosrestaurantes(id: $variosrestaurantesId) {
+			nombre
+			direccion
+			imagen
+			descripcion
+			latitud
+			longitud
+			id
+		}
+	}
+`;
+
+const GET_All = gql`
+	query GetRestaurantes {
+		getRestaurantes {
+			nombre
+			direccion
+			imagen
+			descripcion
+			latitud
+			longitud
+			id
+		}
+	}
+`;
 
 const RestList = ({ navigation }) => {
 	const [search, onChangeSearch] = useState("");
+	const { userData } = useContext(AuthUserContext);
+	const { loading, error, data } = useQuery(GET_All);
+	const [rests, setRests] = useState([]);
+
+	useEffect(() => {}, [userData]);
 
 	return (
 		<View style={tw`h-full`}>
@@ -114,7 +65,7 @@ const RestList = ({ navigation }) => {
 			<View style={tw`mx-5`}>
 				<FlatList
 					style={tw`h-150`}
-					data={rest}
+					data={rests}
 					keyExtractor={(item) => item.id}
 					renderItem={({ item, index }) => {
 						return <CardRest item={item} />;
