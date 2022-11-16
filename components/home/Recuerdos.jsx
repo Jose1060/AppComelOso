@@ -8,7 +8,7 @@ import { AuthUserContext } from "../../utils/LoginContext.js";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 
 const GET_REST = gql`
-	query Variosrestaurantes($id: [String]) {
+	query Variosrestaurantes($id: [ID]) {
 		Variosrestaurantes(id: $id) {
 			nombre
 			direccion
@@ -24,6 +24,20 @@ const GET_REST = gql`
 const Recuerdos = ({ navigation }) => {
 	const { userData } = useContext(AuthUserContext);
 	const [getRests, result] = useLazyQuery(GET_REST);
+	const [rest, setRest] = useState([]);
+
+	useEffect(() => {
+		const a = getRests({
+			variables: {
+				id: userData.restaurantes_visitados_favoritos,
+			},
+		});
+		console.log("Promesa", a);
+		if (result.data) {
+			setRest(result.data.Variosrestaurantes);
+		}
+		console.log("Resultado", result.data);
+	}, [userData]);
 
 	return (
 		<View style={tw``}>
@@ -39,7 +53,7 @@ const Recuerdos = ({ navigation }) => {
 					<Text style={tw`mt-3 ml-3 text-2xl`}>Ver Recuerdos:</Text>
 				</View>
 				<FlatList
-					data={userData.restaurantes_visitados_favoritos}
+					data={rest}
 					horizontal={true}
 					keyExtractor={(item) => item.id + "-recuerdo-" + item.title}
 					showsHorizontalScrollIndicator={false}
