@@ -23,7 +23,7 @@ export default {
 		},
 		android: {
 			package: "com.josem.appcomeloso",
-
+			versionCode: 1,
 			adaptiveIcon: {
 				foregroundImage: "./assets/adaptive-icon.png",
 				backgroundColor: "#FFFFFF",
@@ -35,7 +35,7 @@ export default {
 			},
 		},
 		web: {
-			favicon: "./assets/favicon.png",
+			favicon: "./assets/icon.png",
 		},
 		extra: {
 			apiKey: process.env.API_KEY,
@@ -46,6 +46,9 @@ export default {
 			appId: process.env.APP_ID,
 			measurementId: process.env.MEASUREMENT_ID,
 			googleMapsKey: process.env.GOOGLE_MAPS_APIKEY,
+			eas: {
+				projectId: "7b3d3a94-ac12-42e4-8384-ae1d2f838fe2",
+			},
 		},
 	},
 };
